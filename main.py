@@ -19,10 +19,22 @@ api.add_resource(DeleteUnitOwner, '/api/delete_unit_owner')
 
 
 @app.route("/owners")
-def index():
+def owner_index():
     data = requests.get("http://localhost:5000/api/owners")
 
-    return render_template("index.html", message=data.json());
+    return render_template("owners/index.html", message=data.json());
+
+
+@app.route("/units")
+def unit_index():
+    data = requests.get("http://localhost:5000/api/units")
+
+    return render_template("units/index.html", message=data.json());
+
+
+@app.route("/")
+def test():
+    return render_template("/welcome/index.html");
 
 
 if __name__ == '__main__':

@@ -1,8 +1,6 @@
 from flask_restful import Resource, Api
 from google.cloud import bigquery
 from flask import request
-import requests
-import json
 
 class Owners(Resource):
     def get(self):
