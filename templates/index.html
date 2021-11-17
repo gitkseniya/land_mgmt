@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flask Template</title>
+
+  </head>
+  <body>
+    <div>
+      <p>{% for item in message %}
+      <div style="margin: 5px;" class="flash">{{ item["id"] }}  {{ item["full_name"] }} || {{ item["address"] }}</div>
+      {%endfor %}</p>
+    </div>
+  </body>
+</html>
