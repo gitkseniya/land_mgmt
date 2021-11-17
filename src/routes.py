@@ -1,6 +1,8 @@
 from flask_restful import Resource, Api
 from google.cloud import bigquery
-
+from flask import request
+import requests
+import json
 
 class Owners(Resource):
     def get(self):
@@ -54,15 +56,32 @@ class OwnersByUnit(Resource):
 
 
 class CreateOwner(Resource):
+
+    # def __init__(self):
+    #     self.args = self._parse_args()
+    #
+    # def _parse_args(self):
+    #     args = {}
+    #
+    #     if request.is_json:
+    #         args = request.json
+    #     else:
+    #         args = dict(request.args)
+    #
+    #     return args
+
     def post(self):
         client = bigquery.Client()
 
         query = """
-            SELECT *
-            FROM `landmanagementservice.land_deal_info.owners` 
-            ORDER BY id
-        """
+                    INSERT INTO land_deal_info.owners(full_name, address) 
+                    VALUES('{}','{}')
+                """.format(request.json["full_name"], request.json["address"])
 
         query_job = client.query(query)
 
-        return [dict(i) for i in query_job]
+        print(query_job)
+        print(dict(query_job))
+
+        return "success"
+

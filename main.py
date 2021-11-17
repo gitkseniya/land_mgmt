@@ -13,6 +13,7 @@ api = Api(app)
 api.add_resource(Owners, '/api/owners')
 api.add_resource(Units, '/api/units')
 api.add_resource(OwnersByUnit, '/api/units/<int:id>/owners')
+api.add_resource(CreateOwner, '/api/create_owner')
 
 @app.route("/owners")
 def index():
