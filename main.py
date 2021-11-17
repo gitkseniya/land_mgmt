@@ -9,11 +9,13 @@ app = Flask(__name__)
 api = Api(app)
 
 
-
 api.add_resource(Owners, '/api/owners')
 api.add_resource(Units, '/api/units')
 api.add_resource(OwnersByUnit, '/api/units/<int:id>/owners')
 api.add_resource(CreateOwner, '/api/create_owner')
+api.add_resource(CreateUnit, '/api/create_unit')
+api.add_resource(CreateUnitOwner, '/api/create_unit_owner')
+
 
 @app.route("/owners")
 def index():

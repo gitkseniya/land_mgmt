@@ -57,18 +57,18 @@ class OwnersByUnit(Resource):
 
 class CreateOwner(Resource):
 
-    # def __init__(self):
-    #     self.args = self._parse_args()
-    #
-    # def _parse_args(self):
-    #     args = {}
-    #
-    #     if request.is_json:
-    #         args = request.json
-    #     else:
-    #         args = dict(request.args)
-    #
-    #     return args
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
 
     def post(self):
         client = bigquery.Client()
@@ -76,12 +76,67 @@ class CreateOwner(Resource):
         query = """
                     INSERT INTO land_deal_info.owners(full_name, address) 
                     VALUES('{}','{}')
-                """.format(request.json["full_name"], request.json["address"])
+                """.format(self.args["full_name"], self.args["address"])
+        # OR: remove args init and .format(request.json["full_name"], request.json["address"])
 
         query_job = client.query(query)
 
         print(query_job)
         print(dict(query_job))
 
-        return "success"
+        return "owner created"
 
+
+class CreateUnit(Resource):
+
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def post(self):
+        client = bigquery.Client()
+
+        query = """
+                    INSERT INTO land_deal_info.units(name, legal_description, order_no) 
+                    VALUES('{}','{}', '{}')
+                """.format(self.args["name"], self.args["legal_description"], self.args["order_no"])
+
+        query_job = client.query(query)
+
+        return "unit created"
+
+
+class CreateUnitOwner(Resource):
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def post(self):
+        client = bigquery.Client()
+
+        query = """
+                INSERT INTO land_deal_info.unit_owners(unit_id, owner_id) 
+                VALUES({},{})
+                """.format(self.args["unit_id"], self.args["owner_id"])
+
+        query_job = client.query(query)
+
+        return "created unit owner"
