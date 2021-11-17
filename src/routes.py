@@ -140,3 +140,30 @@ class CreateUnitOwner(Resource):
         query_job = client.query(query)
 
         return "created unit owner"
+
+
+class DeleteUnitOwner(Resource):
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def delete(self):
+        client = bigquery.Client()
+
+        query = """
+                DELETE land_deal_info.unit_owners
+                WHERE unit_id = {} AND owner_id = {}
+                """.format(self.args["unit_id"], self.args["owner_id"])
+
+        query_job = client.query(query)
+
+        return "deleted unit owner"
