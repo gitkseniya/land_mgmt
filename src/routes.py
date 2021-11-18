@@ -34,7 +34,7 @@ class Units(Resource):
 class OwnersByUnit(Resource):
     def get(self, id):
         client = bigquery.Client()
-
+        breakpoint()
         query = """
             SELECT units_table.name, units_table.legal_description, owners_table.full_name, owners_table.address
              FROM `landmanagementservice.land_deal_info.units` units_table
