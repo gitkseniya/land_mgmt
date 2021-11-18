@@ -1,8 +1,6 @@
 from flask_restful import Resource, Api
 from google.cloud import bigquery
 from flask import request
-import requests
-import json
 
 class Owners(Resource):
     def get(self):
@@ -36,7 +34,7 @@ class Units(Resource):
 class OwnersByUnit(Resource):
     def get(self, id):
         client = bigquery.Client()
-
+        breakpoint()
         query = """
             SELECT units_table.name, units_table.legal_description, owners_table.full_name, owners_table.address
              FROM `landmanagementservice.land_deal_info.units` units_table
@@ -57,18 +55,18 @@ class OwnersByUnit(Resource):
 
 class CreateOwner(Resource):
 
-    # def __init__(self):
-    #     self.args = self._parse_args()
-    #
-    # def _parse_args(self):
-    #     args = {}
-    #
-    #     if request.is_json:
-    #         args = request.json
-    #     else:
-    #         args = dict(request.args)
-    #
-    #     return args
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
 
     def post(self):
         client = bigquery.Client()
@@ -76,12 +74,94 @@ class CreateOwner(Resource):
         query = """
                     INSERT INTO land_deal_info.owners(full_name, address) 
                     VALUES('{}','{}')
-                """.format(request.json["full_name"], request.json["address"])
+                """.format(self.args["full_name"], self.args["address"])
+        # OR: remove args init and .format(request.json["full_name"], request.json["address"])
 
         query_job = client.query(query)
 
         print(query_job)
         print(dict(query_job))
 
-        return "success"
+        return "owner created"
 
+
+class CreateUnit(Resource):
+
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def post(self):
+        client = bigquery.Client()
+
+        query = """
+                    INSERT INTO land_deal_info.units(name, legal_description, order_no) 
+                    VALUES('{}','{}', '{}')
+                """.format(self.args["name"], self.args["legal_description"], self.args["order_no"])
+
+        query_job = client.query(query)
+
+        return "unit created"
+
+
+class CreateUnitOwner(Resource):
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def post(self):
+        client = bigquery.Client()
+
+        query = """
+                INSERT INTO land_deal_info.unit_owners(unit_id, owner_id) 
+                VALUES({},{})
+                """.format(self.args["unit_id"], self.args["owner_id"])
+
+        query_job = client.query(query)
+
+        return "created unit owner"
+
+
+class DeleteUnitOwner(Resource):
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def delete(self):
+        client = bigquery.Client()
+
+        query = """
+                DELETE land_deal_info.unit_owners
+                WHERE unit_id = {} AND owner_id = {}
+                """.format(self.args["unit_id"], self.args["owner_id"])
+
+        query_job = client.query(query)
+
+        return "deleted unit owner"
