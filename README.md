@@ -18,3 +18,8 @@ SELECT
 FROM
   landmanagementservice.land_deal_info.owners
 ```
+```
+SELECT *
+FROM `landmanagementservice.land_deal_info.owners` 
+WHERE LOWER( full_name ) LIKE '%alex%'
+```
