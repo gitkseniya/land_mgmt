@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Owners Index</title>
+
+  </head>
+  <body>
+  <!-- Table Header -->
+   <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">Full Name</th>
+      <th scope="col">Address</th>
+      <th scope="col">See details</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for item in message %}
+    <tr>
+      <th scope="row">{{item["id"]}}</th>
+      <td>{{item["full_name"]}}</td>
+      <td>{{item["address"]}}</td>
+      <td><a href="/owners/<int:id>"  type="button" class="btn btn-outline-info">details</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  </body>
+</html>
