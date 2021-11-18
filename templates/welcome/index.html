@@ -23,15 +23,15 @@
     <a href="/owners"  type="button" class="btn btn-info">List of Owners</a>
     <br><br><br>
 
-    <button type="button" class="btn btn-info">Search Owners</button>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+    Search Owners
+    <form action="/owners" method="get" class="form-inline my-2 my-lg-0">
+      <input name="search_params" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <input type="submit" class="btn btn-outline-info my-2 my-sm-0" value="Search" />
     </form><br><br><br>
 
 
 
-  <button type="button" class="btn btn-info">Search Units</button>
+  Search Units
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>

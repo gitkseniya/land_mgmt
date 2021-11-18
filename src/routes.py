@@ -5,12 +5,20 @@ from flask import request
 class Owners(Resource):
     def get(self):
         client = bigquery.Client()
+        print(request.args)
+        if "search_params" in request.args:
+            query = """
+                SELECT *
+                FROM `landmanagementservice.land_deal_info.owners` 
+                WHERE LOWER(full_name) LIKE '%{}%'
+            """.format(request.args["search_params"].lower())
+        else:
+            query = """
+                SELECT *
+                FROM `landmanagementservice.land_deal_info.owners` 
+            """
+        print(query)
 
-        query = """
-            SELECT *
-            FROM `landmanagementservice.land_deal_info.owners` 
-            ORDER BY id
-        """
 
         query_job = client.query(query)
 
@@ -38,7 +46,7 @@ class OwnerShow(Resource):
         query = """
             SELECT *
             FROM `landmanagementservice.land_deal_info.owners` 
-            WHERE id = {}
+            WHERE id = '{}'
         """.format(id)
 
         query_job = client.query(query)
@@ -53,7 +61,7 @@ class UnitShow(Resource):
         query = """
             SELECT *
             FROM `landmanagementservice.land_deal_info.units` 
-            WHERE id = {}
+            WHERE id = '{}'
         """.format(id)
 
         query_job = client.query(query)
@@ -102,8 +110,8 @@ class CreateOwner(Resource):
         client = bigquery.Client()
 
         query = """
-                    INSERT INTO land_deal_info.owners(full_name, address) 
-                    VALUES('{}','{}')
+                    INSERT INTO land_deal_info.owners(id,full_name, address) 
+                    VALUES(GENERATE_UUID(),'{}','{}')
                 """.format(self.args["full_name"], self.args["address"])
         # OR: remove args init and .format(request.json["full_name"], request.json["address"])
 
