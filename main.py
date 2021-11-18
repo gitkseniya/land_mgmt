@@ -32,7 +32,10 @@ def owner_index():
 
 @app.route("/units")
 def unit_index():
-    data = requests.get("http://localhost:5000/api/units")
+    if "search_params" in request.args:
+        data = requests.get("http://localhost:5000/api/units?search_params={}".format(request.args["search_params"]))
+    else:
+        data = requests.get("http://localhost:5000/api/units")
 
     return render_template("units/index.html", message=data.json());
 

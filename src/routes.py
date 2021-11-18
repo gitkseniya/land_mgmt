@@ -5,7 +5,7 @@ from flask import request
 class Owners(Resource):
     def get(self):
         client = bigquery.Client()
-        print(request.args)
+
         if "search_params" in request.args:
             query = """
                 SELECT *
@@ -19,7 +19,6 @@ class Owners(Resource):
             """
         print(query)
 
-
         query_job = client.query(query)
 
         return [dict(i) for i in query_job]
@@ -29,10 +28,17 @@ class Units(Resource):
     def get(self):
         client = bigquery.Client()
 
-        query = """
-            SELECT *
-            FROM `landmanagementservice.land_deal_info.units` 
-        """
+        if "search_params" in request.args:
+            query = """
+                SELECT *
+                FROM `landmanagementservice.land_deal_info.units` 
+                WHERE LOWER(name) LIKE '%{}%'
+            """.format(request.args["search_params"].lower())
+        else:
+            query = """
+                SELECT *
+                FROM `landmanagementservice.land_deal_info.units` 
+            """
 
         query_job = client.query(query)
 
