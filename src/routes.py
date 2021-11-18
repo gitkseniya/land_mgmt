@@ -31,10 +31,40 @@ class Units(Resource):
         return [dict(i) for i in query_job]
 
 
+class OwnerShow(Resource):
+    def get(self, id):
+        client = bigquery.Client()
+
+        query = """
+            SELECT *
+            FROM `landmanagementservice.land_deal_info.owners` 
+            WHERE id = {}
+        """.format(id)
+
+        query_job = client.query(query)
+
+        return [dict(i) for i in query_job]
+
+
+class UnitShow(Resource):
+    def get(self, id):
+        client = bigquery.Client()
+
+        query = """
+            SELECT *
+            FROM `landmanagementservice.land_deal_info.units` 
+            WHERE id = {}
+        """.format(id)
+
+        query_job = client.query(query)
+
+        return [dict(i) for i in query_job]
+
+
 class OwnersByUnit(Resource):
     def get(self, id):
         client = bigquery.Client()
-        breakpoint()
+
         query = """
             SELECT units_table.name, units_table.legal_description, owners_table.full_name, owners_table.address
              FROM `landmanagementservice.land_deal_info.units` units_table

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Unit Show</title>
+
+  </head>
+  <body>
+
+  <p>{% for item in message %}
+      <b>id:</b> {{item["id"]}}<br>
+      <b>name:</b> {{item["name"]}}<br>
+      <b>legal description:</b> {{item["legal_description"]}}<br>
+      <b>order number:</b> {{item["order_no"]}}<br>
+      {% endfor %}
+  </p>
+
+  </body>
+</html>
