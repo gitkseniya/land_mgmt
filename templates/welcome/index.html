@@ -1,19 +1,39 @@
 {% extends "layout.html" %}
 
+{% block head %}
+    <style>
+    .flex-container {
+      display: flex;
+      flex-direction: row;
+      background-color: LightYellow;
+      justify-content: center;
+    }
+
+    .flex-container > div {
+      width: 100px;
+      margin: 10px;
+      text-align: center;
+      line-height: 75px;
+      font-size: 30px;
+    }
+
+    </style>
+{% endblock %}
+
 {% block content %}
-    Search Owners
-    <form action="/owners" method="get" class="form-inline my-2 my-lg-0">
+<div class="flex-container">
+
+<form action="/units" method="get" class="form-inline my-2 my-lg-0">
       <input name="search_params" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <input type="submit" class="btn btn-outline-info my-2 my-sm-0" value="Search" />
-    </form><br><br><br>
-
-
-
-  Search Units
-    <form action="/units" method="get" class="form-inline my-2 my-lg-0">
-      <input name="search_params" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <input type="submit" class="btn btn-outline-info my-2 my-sm-0" value="Search" />
+      <input type="submit" class="btn btn-outline-info my-2 my-sm-0" value="Search Units" />
     </form>
 
+     <br><br><br><br><br><br>
 
+    <form action="/owners" method="get" class="form-inline my-2 my-lg-0">
+        <input name="search_params" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <input type="submit" class="btn btn-outline-info my-2 my-sm-0" value="Search Owners" />
+    </form>
+
+</div>
 {% endblock %}
