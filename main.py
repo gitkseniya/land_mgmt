@@ -13,7 +13,7 @@ api.add_resource(Owners, '/api/owners')
 api.add_resource(Units, '/api/units')
 api.add_resource(OwnerShow, '/api/owners/<string:id>')
 api.add_resource(UnitShow, '/api/units/<string:id>')
-api.add_resource(OwnersByUnit, '/api/units/<int:id>/owners')
+api.add_resource(OwnersByUnit, '/api/units/<string:id>/owners')
 api.add_resource(CreateOwner, '/api/create_owner')
 api.add_resource(CreateUnit, '/api/create_unit')
 api.add_resource(CreateUnitOwner, '/api/create_unit_owner')
@@ -62,9 +62,8 @@ def unit_owners_index(id):
     return render_template("units/owners.html", message=data.json());
 
 
-
 @app.route("/")
-def test():
+def welcome_index():
     return render_template("/welcome/index.html");
 
 

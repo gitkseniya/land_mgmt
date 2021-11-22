@@ -6,6 +6,8 @@
       <b>name:</b> {{item["name"]}}<br>
       <b>legal description:</b> {{item["legal_description"]}}<br>
       <b>order number:</b> {{item["order_no"]}}<br>
+
+      <a href="/units/{{ item['id'] }}/owners"  type="button" class="btn btn-outline-info">Owner list</a></td>
       {% endfor %}
   </p>
 

@@ -82,7 +82,7 @@ class OwnersByUnit(Resource):
         client = bigquery.Client()
 
         query = """
-            SELECT units_table.name, units_table.legal_description, owners_table.full_name, owners_table.address
+            SELECT units_table.name, units_table.legal_description, owners_table.full_name, owners_table.address, unit_owners_table.interest_type, unit_owners_table.current_owner, unit_owners_table.comments, unit_owners_table.vesting_docs
              FROM `landmanagementservice.land_deal_info.units` units_table
              
              JOIN `land_deal_info.unit_owners` unit_owners_table
@@ -91,7 +91,7 @@ class OwnersByUnit(Resource):
              JOIN `land_deal_info.owners` owners_table
              ON unit_owners_table.owner_id = owners_table.id 
              
-             WHERE units_table.id = {}
+             WHERE units_table.id = '{}'
         """.format(id)
 
         query_job = client.query(query)
