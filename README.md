@@ -23,3 +23,6 @@ SELECT *
 FROM `landmanagementservice.land_deal_info.owners` 
 WHERE LOWER( full_name ) LIKE '%alex%'
 ```
+```
+DELETE FROM `landmanagementservice.land_deal_info.unit_owners` WHERE true;
+```

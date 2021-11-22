@@ -32,8 +32,10 @@ class Units(Resource):
             query = """
                 SELECT *
                 FROM `landmanagementservice.land_deal_info.units` 
-                WHERE LOWER(name) LIKE '%{}%'
-            """.format(request.args["search_params"].lower())
+                WHERE LOWER(name) LIKE '%{search_params}%' 
+                OR LOWER(legal_description) LIKE '%{search_params}%' 
+                OR LOWER(order_no) LIKE '%{search_params}%' 
+            """.format(search_params=request.args["search_params"].lower())
         else:
             query = """
                 SELECT *
