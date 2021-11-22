@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+{% extends "layout.html" %}
 
-    <title>Owners Index</title>
-
-  </head>
-  <body>
+{% block content %}
   <!-- Table Header -->
    <table class="table">
   <thead>
     <tr>
       <th scope="col">Full Name</th>
       <th scope="col">Address</th>
+      <th scope="col">County, State, Zip</th>
+      <th scope="col">Phone Number</th>
       <th scope="col">See details</th>
     </tr>
   </thead>
@@ -23,11 +18,12 @@
     <tr>
       <td>{{item["full_name"]}}</td>
       <td>{{item["address"]}}</td>
+      <td>{{item["county_state_zip"]}}</td>
+      <td>{{item["phone_no"]}}</td>
       <td><a href="/owners/{{ item['id'] }}"  type="button" class="btn btn-outline-info">details</a></td>
     </tr>
     {% endfor %}
     </tbody>
   </table>
 
-  </body>
-</html>
+{% endblock %}

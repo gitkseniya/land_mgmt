@@ -1,20 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+{% extends "layout.html" %}
 
-    <title>Owner Show</title>
-
-  </head>
-  <body>
+{% block content %}
 
   <p>{% for item in message %}
-      <b>id:</b> {{item["id"]}}<br>
       <b>full name:</b> {{item["full_name"]}}<br>
       <b>address:</b> {{item["address"]}}<br>
+      <b>county/state/zip:</b> {{item["county_state_zip"]}}<br>
+      <b>phone number:</b> {{item["phone_no"]}}<br>
       {% endfor %}
   </p>
 
-  </body>
-</html>
+{% endblock %}
