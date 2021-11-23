@@ -30,3 +30,9 @@ def test_owner_show(app):
     assert isinstance(response[0]["id"], str)
     assert isinstance(response[0]["county_state_zip"], str)
     assert isinstance(response[0]["phone_no"], str)
+
+    assert response[0]["full_name"] == "TRIPLE BOX AB"
+    assert response[0]["address"] == "AB VINBARSGATAN 28 BARA, SE SE-233 \t"
+    assert response[0]["id"] == "e5a10ee9-0849-4ffb-9a09-9ef179130d3b"
+    assert response[0]["county_state_zip"] == "SWEDEN"
+    assert response[0]["phone_no"] == "N/A; Lives in Sweden"
