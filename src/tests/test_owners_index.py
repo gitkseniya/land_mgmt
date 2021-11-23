@@ -1,4 +1,4 @@
-from .routes import Owners
+from src.routes import Owners
 import pytest
 from flask import Flask
 from flask_restful import Api
