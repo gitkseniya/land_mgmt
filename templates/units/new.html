@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+
+{% endblock %}
+
+{% block content %}
+
+
+<h4>Fill in all fields:</h4>
+
+  <form action="/units" method="post" class="form-inline">
+    <div class="form-group">
+
+    <label>Unit Name</label>
+      <input type="text" name="name" class="form-control mx-sm-3">
+
+    <label>Legal Description</label>
+      <input type="text" name="legal_description" class="form-control mx-sm-3">
+
+    <label>Unit Order Number</label>
+      <input type="text" name="order_no" class="form-control mx-sm-3">
+      <input type="submit">
+
+    </div>
+  </form>
+
+{% endblock %}

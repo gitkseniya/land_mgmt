@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
+{% block content %}
+
+
+  <h3>Unit name: {{ message[0]["name"] }}</h3>
+  <h5>Unit legal description: {{ message[0]["legal_description"] }}</h5>
+
+  <!-- Table Header -->
+   <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Owner Name</th>
+      <th scope="col">Interest Type</th>
+      <th scope="col">Current Owner?</th>
+      <th scope="col">Comments</th>
+      <th scope="col">Vesting Docs</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for item in message %}
+    <tr>
+      <td>{{item["full_name"]}}</td>
+      <td>{{item["interest_type"]}}</td>
+      <td>{{item["current_owner"]}}</td>
+      <td>{{item["comments"]}}</td>
+      <td>{{item["vesting_docs"]}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+
+{% endblock %}

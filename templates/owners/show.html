@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
+{% block content %}
+
+  <p>{% for item in message %}
+      <b>Full name:</b> {{item["full_name"]}}<br>
+      <b>Address:</b> {{item["address"]}}<br>
+      <b>County/state/zip:</b> {{item["county_state_zip"]}}<br>
+      <b>Phone number:</b> {{item["phone_no"]}}<br>
+      {% endfor %}
+  </p>
+
+{% endblock %}

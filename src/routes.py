@@ -6,11 +6,18 @@ class Owners(Resource):
     def get(self):
         client = bigquery.Client()
 
-        query = """
-            SELECT *
-            FROM `landmanagementservice.land_deal_info.owners` 
-            ORDER BY id
-        """
+        if "search_params" in request.args:
+            query = """
+                SELECT *
+                FROM `landmanagementservice.land_deal_info.owners` 
+                WHERE LOWER(full_name) LIKE '%{}%'
+            """.format(request.args["search_params"].lower())
+        else:
+            query = """
+                SELECT *
+                FROM `landmanagementservice.land_deal_info.owners` 
+            """
+        print(query)
 
         query_job = client.query(query)
 
@@ -21,10 +28,49 @@ class Units(Resource):
     def get(self):
         client = bigquery.Client()
 
+        if "search_params" in request.args:
+            query = """
+                SELECT *
+                FROM `landmanagementservice.land_deal_info.units` 
+                WHERE LOWER(name) LIKE '%{search_params}%' 
+                OR LOWER(legal_description) LIKE '%{search_params}%' 
+                OR LOWER(order_no) LIKE '%{search_params}%' 
+            """.format(search_params=request.args["search_params"].lower())
+        else:
+            query = """
+                SELECT *
+                FROM `landmanagementservice.land_deal_info.units` 
+            """
+
+        query_job = client.query(query)
+
+        return [dict(i) for i in query_job]
+
+
+class OwnerShow(Resource):
+    def get(self, id):
+        client = bigquery.Client()
+
+        query = """
+            SELECT *
+            FROM `landmanagementservice.land_deal_info.owners` 
+            WHERE id = '{}'
+        """.format(id)
+
+        query_job = client.query(query)
+
+        return [dict(i) for i in query_job]
+
+
+class UnitShow(Resource):
+    def get(self, id):
+        client = bigquery.Client()
+
         query = """
             SELECT *
             FROM `landmanagementservice.land_deal_info.units` 
-        """
+            WHERE id = '{}'
+        """.format(id)
 
         query_job = client.query(query)
 
@@ -34,9 +80,9 @@ class Units(Resource):
 class OwnersByUnit(Resource):
     def get(self, id):
         client = bigquery.Client()
-        breakpoint()
+
         query = """
-            SELECT units_table.name, units_table.legal_description, owners_table.full_name, owners_table.address
+            SELECT units_table.name, units_table.legal_description, owners_table.full_name, owners_table.address, unit_owners_table.interest_type, unit_owners_table.current_owner, unit_owners_table.comments, unit_owners_table.vesting_docs
              FROM `landmanagementservice.land_deal_info.units` units_table
              
              JOIN `land_deal_info.unit_owners` unit_owners_table
@@ -45,7 +91,7 @@ class OwnersByUnit(Resource):
              JOIN `land_deal_info.owners` owners_table
              ON unit_owners_table.owner_id = owners_table.id 
              
-             WHERE units_table.id = {}
+             WHERE units_table.id = '{}'
         """.format(id)
 
         query_job = client.query(query)
@@ -72,9 +118,9 @@ class CreateOwner(Resource):
         client = bigquery.Client()
 
         query = """
-                    INSERT INTO land_deal_info.owners(full_name, address) 
-                    VALUES('{}','{}')
-                """.format(self.args["full_name"], self.args["address"])
+                    INSERT INTO land_deal_info.owners(id,full_name,address,county_state_zip,phone_no) 
+                    VALUES(GENERATE_UUID(),'{}','{}','{}','{}')
+                """.format(self.args["full_name"], self.args["address"], self.args["county_state_zip"], self.args["phone_no"])
         # OR: remove args init and .format(request.json["full_name"], request.json["address"])
 
         query_job = client.query(query)
@@ -101,6 +147,7 @@ class CreateUnit(Resource):
         return args
 
     def post(self):
+
         client = bigquery.Client()
 
         query = """
@@ -165,3 +212,4 @@ class DeleteUnitOwner(Resource):
         query_job = client.query(query)
 
         return "deleted unit owner"
+
