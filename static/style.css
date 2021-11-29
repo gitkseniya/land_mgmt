@@ -1,0 +1,12 @@
+h2, h3, h4   { font-family: Tahoma, "Trebuchet MS", sans-serif; }
+
+.form-group {
+  padding:27px;
+}
+
+
+.table{
+  margin-left:35px;
+  padding-right:20px;
+  font-size: 14px;
+}

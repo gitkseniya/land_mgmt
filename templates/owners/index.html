@@ -1,7 +1,13 @@
 {% extends "layout.html" %}
 
+{% block head %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+
+{% endblock %}
+
 {% block content %}
   <!-- Table Header -->
+
    <table class="table">
   <thead>
     <tr>
@@ -9,21 +15,27 @@
       <th scope="col">Address</th>
       <th scope="col">County, State, Zip</th>
       <th scope="col">Phone Number</th>
-      <th scope="col">See details</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
 
     {% for item in message %}
     <tr>
-      <td>{{item["full_name"]}}</td>
-      <td>{{item["address"]}}</td>
-      <td>{{item["county_state_zip"]}}</td>
-      <td>{{item["phone_no"]}}</td>
-      <td><a href="/owners/{{ item['id'] }}"  type="button" class="btn btn-outline-info">details</a></td>
+      <td class="col-md-3">{{item["full_name"]}}</td>
+      <td class="col-md-3">{{item["address"]}}</td>
+      <td class="col-md-2">{{item["county_state_zip"]}}</td>
+      <td class="col-md-2">{{item["phone_no"]}}</td>
+      <td><a href="/owners/{{ item['id'] }}"  type="button" class="btn btn-outline-info">View</a></td>
+      <td><a href="/owners/{{ item['id'] }}/edit}"  type="button" class="btn btn-outline-info">Edit</a></td>
     </tr>
     {% endfor %}
     </tbody>
   </table>
+
+  <div class="btn-group ml-5" role="group" aria-label="First group">
+    <a href="/owners/new"  type="button" class="btn btn-outline-info">Add Owner</a>
+  </div>
 
 {% endblock %}
