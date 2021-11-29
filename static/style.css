@@ -4,6 +4,11 @@ h2, h3, h4   { font-family: Tahoma, "Trebuchet MS", sans-serif; }
   padding:27px;
 }
 
+p {
+  padding:27px;
+}
+
+
 
 .table{
   margin-left:35px;

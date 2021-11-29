@@ -118,9 +118,9 @@ class CreateOwner(Resource):
         client = bigquery.Client()
 
         query = """
-                    INSERT INTO land_deal_info.owners(id,full_name, address) 
-                    VALUES(GENERATE_UUID(),'{}','{}')
-                """.format(self.args["full_name"], self.args["address"])
+                    INSERT INTO land_deal_info.owners(id,full_name,address,county_state_zip,phone_no) 
+                    VALUES(GENERATE_UUID(),'{}','{}','{}','{}')
+                """.format(self.args["full_name"], self.args["address"], self.args["county_state_zip"], self.args["phone_no"])
         # OR: remove args init and .format(request.json["full_name"], request.json["address"])
 
         query_job = client.query(query)
@@ -147,6 +147,7 @@ class CreateUnit(Resource):
         return args
 
     def post(self):
+
         client = bigquery.Client()
 
         query = """
@@ -211,3 +212,4 @@ class DeleteUnitOwner(Resource):
         query_job = client.query(query)
 
         return "deleted unit owner"
+
