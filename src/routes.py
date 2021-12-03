@@ -1,6 +1,7 @@
 from flask_restful import Resource, Api
 from google.cloud import bigquery
 from flask import request
+import urllib.request, json
 
 class Owners(Resource):
     def get(self):
@@ -213,3 +214,14 @@ class DeleteUnitOwner(Resource):
 
         return "deleted unit owner"
 
+class PhoneBurnerOwnerShow(Resource):
+    def get(self, id):
+
+        # url = "https://www.phoneburner.com/rest/1/contacts?page_size=1&page=1&api_key={}".format(os.environ.get("TMDB_API_KEY"))
+        url = "https://api.themoviedb.org/3/movie/76341?api_key=53cee549bb0361b2582b55d6d8ae70fd"
+
+        response = urllib.request.urlopen(url)
+        data = response.read()
+        dict = json.loads(data)
+
+        return dict

@@ -19,6 +19,7 @@ api.add_resource(CreateOwner, '/api/create_owner')
 api.add_resource(CreateUnit, '/api/create_unit')
 api.add_resource(CreateUnitOwner, '/api/create_unit_owner')
 api.add_resource(DeleteUnitOwner, '/api/delete_unit_owner')
+api.add_resource(PhoneBurnerOwnerShow, '/api/phone_burner/owners/<string:id>')
 
 
 
