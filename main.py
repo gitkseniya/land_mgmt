@@ -5,6 +5,7 @@ import requests
 import os
 from flask import Flask, render_template
 
+PORT = int(os.environ.get("PORT", 8080))
 
 app = Flask(__name__)
 api = Api(app)
@@ -46,15 +47,22 @@ def unit_index():
     return render_template("units/index.html", message=data.json());
 
 
-@app.route("/owners/<id>/edit")
+@app.route("/owners/<id>/edit", methods=['GET', 'PATCH'])
 def owner_edit(id):
     data = requests.get("http://localhost:5000/api/owners/" + str(id))
-    return render_template("owners/edit.html", message=data.json());
+    if request.method == 'GET':
+        return render_template("owners/edit.html", message=data.json());
+
+    else:
+        requests.patch("http://localhost:5000/api/owners/{}/edit".format(id))
+
+
+
+
 
 @app.route("/owners/<id>")
 def owner_show(id):
     data = requests.get("http://localhost:5000/api/owners/"+ str(id))
-
     return render_template("owners/show.html", message=data.json());
 
 
@@ -100,4 +108,5 @@ def owner_create():
     return render_template("welcome/index.html");
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    print("PORT is {}".format(PORT))
+    app.run(debug=True,host='0.0.0.0',port=PORT)
