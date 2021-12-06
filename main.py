@@ -18,8 +18,11 @@ api.add_resource(OwnersByUnit, '/api/units/<string:id>/owners')
 api.add_resource(CreateOwner, '/api/create_owner')
 api.add_resource(CreateUnit, '/api/create_unit')
 api.add_resource(CreateUnitOwner, '/api/create_unit_owner')
-api.add_resource(DeleteUnitOwner, '/api/delete_unit_owner')
+# api.add_resource(DeleteUnitOwner, '/api/delete_unit_owner')
+api.add_resource(DeleteUnitOwner, '/api/units/<string:unit_id>/owners/<string:owner_id>/delete')
 api.add_resource(PhoneBurnerOwnerShow, '/api/phone_burner/owners/<string:id>')
+api.add_resource(EditOwner, '/api/owners/<string:owner_id>/edit')
+
 
 
 
@@ -42,6 +45,11 @@ def unit_index():
 
     return render_template("units/index.html", message=data.json());
 
+
+@app.route("/owners/<id>/edit")
+def owner_edit(id):
+    data = requests.get("http://localhost:5000/api/owners/" + str(id))
+    return render_template("owners/edit.html", message=data.json());
 
 @app.route("/owners/<id>")
 def owner_show(id):
