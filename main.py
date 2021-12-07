@@ -5,7 +5,7 @@ import requests
 import os
 from flask import Flask, render_template
 
-PORT = int(os.environ.get("PORT", 8080))
+PORT = int(os.environ.get("PORT", 5000))
 
 app = Flask(__name__)
 api = Api(app)
@@ -21,6 +21,7 @@ api.add_resource(CreateUnit, '/api/create_unit')
 api.add_resource(CreateUnitOwner, '/api/create_unit_owner')
 # api.add_resource(DeleteUnitOwner, '/api/delete_unit_owner')
 api.add_resource(DeleteUnitOwner, '/api/units/<string:unit_id>/owners/<string:owner_id>/delete')
+api.add_resource(DeleteOwner, '/api/owners/<string:owner_id>/delete')
 api.add_resource(PhoneBurnerOwnerShow, '/api/phone_burner/owners/<string:id>')
 api.add_resource(EditOwner, '/api/owners/<string:owner_id>/edit')
 

@@ -202,7 +202,7 @@ class DeleteUnitOwner(Resource):
 
         return args
 
-        def delete(self, unit_id, owner_id):
+    def delete(self, unit_id, owner_id):
         client = bigquery.Client()
 
         query = """
@@ -213,6 +213,34 @@ class DeleteUnitOwner(Resource):
         query_job = client.query(query)
 
         return "deleted unit owner"
+
+
+class DeleteOwner(Resource):
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def delete(self, owner_id):
+        client = bigquery.Client()
+
+        query = """
+                DELETE land_deal_info.owners
+                WHERE id = '{}'
+                """.format(owner_id)
+
+        query_job = client.query(query)
+
+        return "deleted owner"
+
 
 
 class PhoneBurnerOwnerShow(Resource):
@@ -247,11 +275,10 @@ class EditOwner(Resource):
         breakpoint()
         query = """
                 UPDATE land_deal_info.unit_owners
-                SET new_id = GENERATE_UUID()
                 WHERE owner_id = {}
                 """.format(owner_id)
 
         query_job = client.query(query)
 
-        return "deleted unit owner"
+        return "updated unit owner"
 
