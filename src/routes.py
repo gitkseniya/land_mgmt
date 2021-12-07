@@ -152,8 +152,8 @@ class CreateUnit(Resource):
         client = bigquery.Client()
 
         query = """
-                    INSERT INTO land_deal_info.units(name, legal_description, order_no) 
-                    VALUES('{}','{}', '{}')
+                    INSERT INTO land_deal_info.units(id, name, legal_description, order_no) 
+                    VALUES(GENERATE_UUID(),'{}','{}', '{}')
                 """.format(self.args["name"], self.args["legal_description"], self.args["order_no"])
 
         query_job = client.query(query)
@@ -242,6 +242,32 @@ class DeleteOwner(Resource):
         return "deleted owner"
 
 
+class DeleteUnit(Resource):
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def delete(self, unit_id):
+        client = bigquery.Client()
+
+        query = """
+                DELETE land_deal_info.units
+                WHERE id = '{}'
+                """.format(unit_id)
+
+        query_job = client.query(query)
+
+        return "deleted unit"
+
 
 class PhoneBurnerOwnerShow(Resource):
     def get(self, id):
@@ -272,11 +298,16 @@ class EditOwner(Resource):
 
     def patch(self, owner_id):
         client = bigquery.Client()
-        breakpoint()
+
         query = """
-                UPDATE land_deal_info.unit_owners
-                WHERE owner_id = {}
-                """.format(owner_id)
+                UPDATE landmanagementservice.land_deal_info.owners
+                SET full_name = '{}',
+                address = '{}',
+                county_state_zip = '{}',
+                phone_no = '{}'
+            
+                WHERE id = '{}';
+                """.format(self.args['full_name'], self.args['address'], self.args['county_state_zip'], self.args['phone_no'], owner_id)
 
         query_job = client.query(query)
 

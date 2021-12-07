@@ -26,3 +26,12 @@ WHERE LOWER( full_name ) LIKE '%alex%'
 ```
 DELETE FROM `landmanagementservice.land_deal_info.unit_owners` WHERE true;
 ```
+```
+UPDATE landmanagementservice.land_deal_info.owners
+SET full_name = "A JONSSON",
+    address = "FISMEBACKEN 88 KALMO",
+    county_state_zip = "Russia",
+    phone_no = "n/a"
+
+WHERE id = '777';
+```
