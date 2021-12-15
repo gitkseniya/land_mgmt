@@ -15,6 +15,7 @@ api.add_resource(Owners, '/api/owners')
 api.add_resource(Units, '/api/units')
 api.add_resource(OwnerShow, '/api/owners/<string:id>')
 api.add_resource(UnitShow, '/api/units/<string:id>')
+# api.add_resource(UnitOwnerShow, '/api/units/<string:id>')
 api.add_resource(OwnersByUnit, '/api/units/<string:id>/owners')
 api.add_resource(CreateOwner, '/api/create_owner')
 api.add_resource(CreateUnit, '/api/create_unit')
@@ -23,9 +24,10 @@ api.add_resource(CreateUnitOwner, '/api/create_unit_owner')
 api.add_resource(DeleteUnitOwner, '/api/units/<string:unit_id>/owners/<string:owner_id>/delete')
 api.add_resource(DeleteOwner, '/api/owners/<string:owner_id>/delete')
 api.add_resource(DeleteUnit, '/api/units/<string:unit_id>/delete')
-api.add_resource(PhoneBurnerOwnerShow, '/api/phone_burner/owners/<string:id>')
+api.add_resource(PhoneBurnerContactsIndex, '/api/phone_burner/contacts')
 api.add_resource(EditOwner, '/api/owners/<string:owner_id>/edit')
-
+api.add_resource(EditUnit, '/api/units/<string:unit_id>/edit')
+api.add_resource(EditUnitOwner, '/api/units/<string:unit_id>/owners/<string:owner_id>/edit')
 
 
 

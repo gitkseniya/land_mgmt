@@ -2,6 +2,9 @@ from flask_restful import Resource, Api
 from google.cloud import bigquery
 from flask import request
 import urllib.request, json
+import requests
+from requests.structures import CaseInsensitiveDict
+
 
 class Owners(Resource):
     def get(self):
@@ -180,7 +183,7 @@ class CreateUnitOwner(Resource):
 
         query = """
                 INSERT INTO land_deal_info.unit_owners(unit_id, owner_id) 
-                VALUES({},{})
+                VALUES('{}','{}')
                 """.format(self.args["unit_id"], self.args["owner_id"])
 
         query_job = client.query(query)
@@ -269,17 +272,18 @@ class DeleteUnit(Resource):
         return "deleted unit"
 
 
-class PhoneBurnerOwnerShow(Resource):
-    def get(self, id):
+class PhoneBurnerContactsIndex(Resource):
+    def get(self):
 
-        # url = "https://www.phoneburner.com/rest/1/contacts?page_size=1&page=1&api_key={}".format(os.environ.get("TMDB_API_KEY"))
-        url = "https://api.themoviedb.org/3/movie/76341?api_key=53cee549bb0361b2582b55d6d8ae70fd"
+        url = "https://www.phoneburner.com/rest/1/contacts"
 
-        response = urllib.request.urlopen(url)
-        data = response.read()
-        dict = json.loads(data)
+        headers = CaseInsensitiveDict()
+        headers["Accept"] = "application/json"
+        headers["Authorization"] = "Bearer 0Hj4KTmAWW1xp8gZWDzS3F3ZikMazPhjJqwXKOCe"
 
-        return dict
+        resp = requests.get(url, headers=headers)
+
+        return resp.json()
 
 
 class EditOwner(Resource):
@@ -311,5 +315,71 @@ class EditOwner(Resource):
 
         query_job = client.query(query)
 
-        return "updated unit owner"
+        return "updated owner"
 
+
+class EditUnit(Resource):
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def patch(self, unit_id):
+        client = bigquery.Client()
+
+        query = """
+                UPDATE landmanagementservice.land_deal_info.units
+                SET name = '{}',
+                legal_description = '{}',
+                order_no = '{}'
+
+                WHERE id = '{}';
+                """.format(self.args['name'], self.args['legal_description'], self.args['order_no'], unit_id)
+
+        query_job = client.query(query)
+
+        return "updated unit"
+
+
+class EditUnitOwner(Resource):
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def patch(self, unit_id, owner_id):
+        client = bigquery.Client()
+
+        query = """
+                UPDATE landmanagementservice.land_deal_info.unit_owners
+                SET interest_type = '{}',
+                current_owner = '{}',
+                comments = '{}',
+                vesting_docs = '{}'
+                interest_decimal = '{}',
+                contacted = '{}'
+
+                WHERE unit_id = {} AND owner_id = {}
+                """.format(self.args['interest_type'], self.args['current_owner'], self.args['comments'],
+                           self.args['vesting_docs'], self.args['interest_decimal'],
+                                   self.args['contacted'], unit_id, owner_id)
+
+        query_job = client.query(query)
+
+        return "updated owner"
