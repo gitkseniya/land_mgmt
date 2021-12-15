@@ -1,6 +1,10 @@
 from flask_restful import Resource, Api
 from google.cloud import bigquery
 from flask import request
+import urllib.request, json
+import requests
+from requests.structures import CaseInsensitiveDict
+
 
 class Owners(Resource):
     def get(self):
@@ -151,8 +155,8 @@ class CreateUnit(Resource):
         client = bigquery.Client()
 
         query = """
-                    INSERT INTO land_deal_info.units(name, legal_description, order_no) 
-                    VALUES('{}','{}', '{}')
+                    INSERT INTO land_deal_info.units(id, name, legal_description, order_no) 
+                    VALUES(GENERATE_UUID(),'{}','{}', '{}')
                 """.format(self.args["name"], self.args["legal_description"], self.args["order_no"])
 
         query_job = client.query(query)
@@ -179,7 +183,7 @@ class CreateUnitOwner(Resource):
 
         query = """
                 INSERT INTO land_deal_info.unit_owners(unit_id, owner_id) 
-                VALUES({},{})
+                VALUES('{}','{}')
                 """.format(self.args["unit_id"], self.args["owner_id"])
 
         query_job = client.query(query)
@@ -201,15 +205,181 @@ class DeleteUnitOwner(Resource):
 
         return args
 
-    def delete(self):
+    def delete(self, unit_id, owner_id):
         client = bigquery.Client()
 
         query = """
                 DELETE land_deal_info.unit_owners
                 WHERE unit_id = {} AND owner_id = {}
-                """.format(self.args["unit_id"], self.args["owner_id"])
+                """.format(unit_id, owner_id)
 
         query_job = client.query(query)
 
         return "deleted unit owner"
 
+
+class DeleteOwner(Resource):
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def delete(self, owner_id):
+        client = bigquery.Client()
+
+        query = """
+                DELETE land_deal_info.owners
+                WHERE id = '{}'
+                """.format(owner_id)
+
+        query_job = client.query(query)
+
+        return "deleted owner"
+
+
+class DeleteUnit(Resource):
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def delete(self, unit_id):
+        client = bigquery.Client()
+
+        query = """
+                DELETE land_deal_info.units
+                WHERE id = '{}'
+                """.format(unit_id)
+
+        query_job = client.query(query)
+
+        return "deleted unit"
+
+
+class PhoneBurnerContactsIndex(Resource):
+    def get(self):
+
+        url = "https://www.phoneburner.com/rest/1/contacts"
+
+        headers = CaseInsensitiveDict()
+        headers["Accept"] = "application/json"
+        headers["Authorization"] = "Bearer 0Hj4KTmAWW1xp8gZWDzS3F3ZikMazPhjJqwXKOCe"
+
+        resp = requests.get(url, headers=headers)
+
+        return resp.json()
+
+
+class EditOwner(Resource):
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def patch(self, owner_id):
+        client = bigquery.Client()
+
+        query = """
+                UPDATE landmanagementservice.land_deal_info.owners
+                SET full_name = '{}',
+                address = '{}',
+                county_state_zip = '{}',
+                phone_no = '{}'
+            
+                WHERE id = '{}';
+                """.format(self.args['full_name'], self.args['address'], self.args['county_state_zip'], self.args['phone_no'], owner_id)
+
+        query_job = client.query(query)
+
+        return "updated owner"
+
+
+class EditUnit(Resource):
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def patch(self, unit_id):
+        client = bigquery.Client()
+
+        query = """
+                UPDATE landmanagementservice.land_deal_info.units
+                SET name = '{}',
+                legal_description = '{}',
+                order_no = '{}'
+
+                WHERE id = '{}';
+                """.format(self.args['name'], self.args['legal_description'], self.args['order_no'], unit_id)
+
+        query_job = client.query(query)
+
+        return "updated unit"
+
+
+class EditUnitOwner(Resource):
+    def __init__(self):
+        self.args = self._parse_args()
+
+    def _parse_args(self):
+        args = {}
+
+        if request.is_json:
+            args = request.json
+        else:
+            args = dict(request.args)
+
+        return args
+
+    def patch(self, unit_id, owner_id):
+        client = bigquery.Client()
+
+        query = """
+                UPDATE landmanagementservice.land_deal_info.unit_owners
+                SET interest_type = '{}',
+                current_owner = '{}',
+                comments = '{}',
+                vesting_docs = '{}'
+                interest_decimal = '{}',
+                contacted = '{}'
+
+                WHERE unit_id = {} AND owner_id = {}
+                """.format(self.args['interest_type'], self.args['current_owner'], self.args['comments'],
+                           self.args['vesting_docs'], self.args['interest_decimal'],
+                                   self.args['contacted'], unit_id, owner_id)
+
+        query_job = client.query(query)
+
+        return "updated owner"

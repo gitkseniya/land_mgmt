@@ -5,6 +5,7 @@ import requests
 import os
 from flask import Flask, render_template
 
+PORT = int(os.environ.get("PORT", 5000))
 
 app = Flask(__name__)
 api = Api(app)
@@ -14,11 +15,19 @@ api.add_resource(Owners, '/api/owners')
 api.add_resource(Units, '/api/units')
 api.add_resource(OwnerShow, '/api/owners/<string:id>')
 api.add_resource(UnitShow, '/api/units/<string:id>')
+# api.add_resource(UnitOwnerShow, '/api/units/<string:id>')
 api.add_resource(OwnersByUnit, '/api/units/<string:id>/owners')
 api.add_resource(CreateOwner, '/api/create_owner')
 api.add_resource(CreateUnit, '/api/create_unit')
 api.add_resource(CreateUnitOwner, '/api/create_unit_owner')
-api.add_resource(DeleteUnitOwner, '/api/delete_unit_owner')
+# api.add_resource(DeleteUnitOwner, '/api/delete_unit_owner')
+api.add_resource(DeleteUnitOwner, '/api/units/<string:unit_id>/owners/<string:owner_id>/delete')
+api.add_resource(DeleteOwner, '/api/owners/<string:owner_id>/delete')
+api.add_resource(DeleteUnit, '/api/units/<string:unit_id>/delete')
+api.add_resource(PhoneBurnerContactsIndex, '/api/phone_burner/contacts')
+api.add_resource(EditOwner, '/api/owners/<string:owner_id>/edit')
+api.add_resource(EditUnit, '/api/units/<string:unit_id>/edit')
+api.add_resource(EditUnitOwner, '/api/units/<string:unit_id>/owners/<string:owner_id>/edit')
 
 
 
@@ -42,10 +51,22 @@ def unit_index():
     return render_template("units/index.html", message=data.json());
 
 
+@app.route("/owners/<id>/edit", methods=['GET', 'PATCH'])
+def owner_edit(id):
+    data = requests.get("http://localhost:5000/api/owners/" + str(id))
+    if request.method == 'GET':
+        return render_template("owners/edit.html", message=data.json());
+
+    else:
+        requests.patch("http://localhost:5000/api/owners/{}/edit".format(id))
+
+
+
+
+
 @app.route("/owners/<id>")
 def owner_show(id):
     data = requests.get("http://localhost:5000/api/owners/"+ str(id))
-
     return render_template("owners/show.html", message=data.json());
 
 
@@ -91,4 +112,5 @@ def owner_create():
     return render_template("welcome/index.html");
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    print("PORT is {}".format(PORT))
+    app.run(debug=True,host='0.0.0.0',port=PORT)
